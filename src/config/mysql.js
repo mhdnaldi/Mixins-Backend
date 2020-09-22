@@ -1,16 +1,16 @@
-const mysql = require("mysql")
+const mysql = require("mysql");
 const connection = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "",
-  database: "",
-})
+  password: "root",
+  database: "mixins",
+});
 
 connection.connect((error) => {
   if (error) {
-    throw error
+    throw error;
   }
-  console.log("You are now conected ...")
-})
+  console.log("You are now conected ...");
+});
 
-module.exports = connection
+module.exports = connection;

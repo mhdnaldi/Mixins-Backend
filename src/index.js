@@ -1,3 +1,6 @@
-const route = require("express").Router()
+const route = require("express").Router();
+const users = require("./router/r_auth");
 
-module.exports = route
+route.use("/users", users);
+
+module.exports = route;
