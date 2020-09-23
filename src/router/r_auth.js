@@ -9,11 +9,15 @@ const {
   loginUser,
   patchUser,
   deleteUser,
+  forgotPassword,
+  changePassword,
 } = require("../controller/c_auth");
 
 // GET ALL USER
 route.get("/", authorization, getAllUser);
 route.get("/:id", authorization, getUserById);
+route.post("/forgot-password", forgotPassword);
+route.patch("/change-password", changePassword);
 route.patch("/:id", authorization, uploads, patchUser);
 route.delete("/:id", authorization, uploads, deleteUser);
 // AUTH

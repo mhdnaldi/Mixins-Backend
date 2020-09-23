@@ -37,7 +37,7 @@ module.exports = {
   loginUser: (email) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        `SELECT user_id, user_email, user_password, user_name, user_phone FROM user WHERE user_email = ?`,
+        `SELECT user_id, user_email, user_password, user_name, user_keys, user_phone FROM user WHERE user_email = ?`,
         email,
         (err, data) => {
           !err ? resolve(data) : reject(new Error(err));
@@ -71,6 +71,28 @@ module.exports = {
         id,
         (err, data) => {
           !err ? resolve(data) : reject(new Error(err));
+        }
+      );
+    });
+  },
+  updateKeys: (keys, id) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        "UPDATE user SET user_keys = ? WHERE user_id = ?",
+        [keys, id],
+        (err, data) => {
+          !err ? resolve(data) : reject(new Error(err));
+        }
+      );
+    });
+  },
+  checkKey: (keys) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        "SELECT * FROM user WHERE user_keys = ?",
+        keys,
+        (err, result) => {
+          !err ? resolve(result) : reject(new Error(err));
         }
       );
     });

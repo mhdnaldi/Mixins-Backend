@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 const helper = require("../helper/helper");
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
+const nodemailer = require("nodemailer");
 
 const {
   registerUser,
@@ -10,6 +11,8 @@ const {
   loginUser,
   patchUser,
   deleteUser,
+  updateKeys,
+  checkKey,
 } = require("../model/m_auth");
 
 module.exports = {
@@ -79,7 +82,6 @@ module.exports = {
     const checkDataUser = await loginUser(user_email);
     try {
       if (checkDataUser.length >= 1) {
-        // PROSES COMPARING PASSWORD
         const checkPassword = bcrypt.compareSync(
           user_password,
           checkDataUser[0].user_password
@@ -116,6 +118,82 @@ module.exports = {
       }
     } catch (error) {
       return helper.response(res, 404, "BAD REQUEST", err);
+    }
+  },
+  forgotPassword: async (req, res) => {
+    try {
+      const { user_email } = req.body;
+      const checkDataUser = await loginUser(user_email);
+
+      if (checkDataUser.length >= 1) {
+        const user_id = checkDataUser[0].user_id;
+        let keys = Math.round(Math.random() * 10000);
+        const update = await updateKeys(keys, user_id);
+        let transporter = nodemailer.createTransport({
+          host: "smtp.gmail.com",
+          port: 465,
+          secure: true,
+          auth: {
+            user: "mixins.app@gmail.com",
+            pass: "Soapsoap8*",
+          },
+        });
+        await transporter.sendMail({
+          from: '"MIXINS"',
+          to: user_email,
+          subject: "MIXINS - Forgot Password",
+          html: `<b>${keys}</b>`,
+        }),
+          function (err) {
+            if (err) {
+              return helper.response(res, 400, "Email not sent");
+            }
+          };
+        return helper.response(
+          res,
+          200,
+          "EMAIL HAS BEEN SEND, PLEASE CHECK YOUR EMAIL"
+        );
+      } else {
+        return helper.response("THIS EMAIL IS NOT REGISTERED");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  },
+  changePassword: async (req, res) => {
+    const { user_keys, user_password } = req.body;
+    const passwordFormat = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}$/;
+
+    try {
+      if (!user_password.match(passwordFormat)) {
+        return helper.response(
+          res,
+          404,
+          "PASSWORD MUST INCLUDES AT LEAST 1 UPPERCASE, LOWERCASE, NUMERIC DIGIT AND MINIMUM 8 CHARACTERS"
+        );
+      } else {
+        const salt = bcrypt.genSaltSync(10);
+        const hash = bcrypt.hashSync(user_password, salt); //encrypt password
+        const checkKeys = await checkKey(user_keys);
+        if (checkKeys.length >= 1) {
+          const id = checkKeys[0].user_id;
+          const setData = {
+            user_password: hash,
+            user_keys: null,
+          };
+          const updateKey = await patchUser(setData, id);
+          return helper.response(
+            res,
+            200,
+            "SUCCESS, YOUR PASSWORD IS CHANGED!"
+          );
+        } else {
+          return helper.response(res, 400, "ACCESS DENIED");
+        }
+      }
+    } catch (err) {
+      console.log(err);
     }
   },
   patchUser: async (req, res) => {

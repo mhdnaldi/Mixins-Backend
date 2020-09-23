@@ -8,8 +8,8 @@ const socket = require("socket.io");
 
 const app = express();
 app.use(cors());
-
 app.use(express.static("uploads"));
+
 // SOCKET IO ----------------------------------------------------
 const http = require("http");
 const server = http.createServer(app);
