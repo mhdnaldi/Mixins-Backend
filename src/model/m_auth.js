@@ -1,4 +1,5 @@
 const connection = require("../config/mysql");
+const helper = require("../helper/helper");
 
 module.exports = {
   getAllUser: () => {
@@ -8,6 +9,7 @@ module.exports = {
       });
     });
   },
+
   getUserById: (id) => {
     return new Promise((resolve, reject) => {
       connection.query(
@@ -40,6 +42,7 @@ module.exports = {
         `SELECT user_id, user_email, user_password, user_name, user_keys, user_phone FROM user WHERE user_email = ?`,
         email,
         (err, data) => {
+          // console.log(email);
           !err ? resolve(data) : reject(new Error(err));
         }
       );

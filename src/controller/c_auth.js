@@ -48,13 +48,13 @@ module.exports = {
       const getUserEmail = await getAllUser();
       const getEmail = getUserEmail.map((value) => value.user_email);
       if (getEmail.includes(user_email)) {
-        return helper.response(res, 404, "THIS EMAIL IS ALREADY REGISTERED");
+        return helper.response(res, 400, "THIS EMAIL IS ALREADY REGISTERED");
       } else if (!user_email.match(mailFormat)) {
-        return helper.response(res, 404, "EMAIL FORMAT IS WRONG!");
+        return helper.response(res, 400, "EMAIL FORMAT IS WRONG!");
       } else if (!user_password.match(passwordFormat)) {
         return helper.response(
           res,
-          404,
+          400,
           "PASSWORD MUST INCLUDES AT LEAST 1 UPPERCASE, LOWERCASE, NUMERIC DIGIT AND MINIMUM 8 CHARACTERS"
         );
       } else {
@@ -124,7 +124,7 @@ module.exports = {
     try {
       const { user_email } = req.body;
       const checkDataUser = await loginUser(user_email);
-
+      console.log(checkDataUser);
       if (checkDataUser.length >= 1) {
         const user_id = checkDataUser[0].user_id;
         let keys = Math.round(Math.random() * 10000);
@@ -146,7 +146,7 @@ module.exports = {
         }),
           function (err) {
             if (err) {
-              return helper.response(res, 400, "Email not sent");
+              return helper.response(res, 400, "EMAIL NOT SENT");
             }
           };
         return helper.response(
@@ -159,6 +159,7 @@ module.exports = {
       }
     } catch (err) {
       console.log(err);
+      return helper.response(res, 404, "BAD REQUEST", err);
     }
   },
   changePassword: async (req, res) => {
@@ -169,7 +170,7 @@ module.exports = {
       if (!user_password.match(passwordFormat)) {
         return helper.response(
           res,
-          404,
+          400,
           "PASSWORD MUST INCLUDES AT LEAST 1 UPPERCASE, LOWERCASE, NUMERIC DIGIT AND MINIMUM 8 CHARACTERS"
         );
       } else {
@@ -186,7 +187,7 @@ module.exports = {
           return helper.response(
             res,
             200,
-            "SUCCESS, YOUR PASSWORD IS CHANGED!"
+            "SUCCESS, YOUR PASSWORD HAS BEEN CHANGED!"
           );
         } else {
           return helper.response(res, 400, "ACCESS DENIED");
@@ -194,6 +195,7 @@ module.exports = {
       }
     } catch (err) {
       console.log(err);
+      return helper.response(res, 404, "BAD REQUEST", err);
     }
   },
   patchUser: async (req, res) => {
