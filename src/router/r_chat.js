@@ -1,8 +1,16 @@
 const route = require("express").Router();
-const { postMessage, getRoomId, addFriends } = require("../controller/c_chat");
+const {
+  addFriends,
+  getMyFriends,
+  createRoom,
+  sendMessage,
+  getRoomId,
+} = require("../controller/c_chat");
 
-route.post("/", postMessage);
 route.post("/add-friends", addFriends);
+route.get("/get-friends/:id", getMyFriends);
+route.post("/create-room", createRoom);
+route.post("/send-message", sendMessage);
 route.get("/room-id/:id", getRoomId);
 
 module.exports = route;

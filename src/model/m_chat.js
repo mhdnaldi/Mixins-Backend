@@ -12,6 +12,30 @@ module.exports = {
       );
     });
   },
+  //
+  getAllFriends: (id) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        "SELECT * FROM `friends` JOIN user ON friends.friends_id = user.user_id WHERE friends.user_id = ?",
+        id,
+        (err, data) => {
+          !err ? resolve(data) : reject(new Error(err));
+        }
+      );
+    });
+  },
+  //
+  getUserByEmail: (email) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        `SELECT * FROM user WHERE user_email = '${email}'`,
+
+        (err, data) => {
+          !err ? resolve(data) : reject(new Error(err));
+        }
+      );
+    });
+  },
   addFriend: (setData) => {
     return new Promise((resolve, reject) => {
       connection.query(`INSERT INTO friends SET ?`, setData, (err, data) => {
@@ -82,7 +106,7 @@ module.exports = {
       );
     });
   },
-  getRoomByUSer: (id) => {
+  getRoomByUser: (id) => {
     return new Promise((resolve, reject) => {
       connection.query(
         "SELECT * FROM roomchat WHERE user_id = ?",
