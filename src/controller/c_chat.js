@@ -15,15 +15,16 @@ module.exports = {
     const { user_id, friends_email } = req.body;
     try {
       const getFriend = await getUserByEmail(friends_email);
+
       const setData = {
         user_id,
         friends_id: getFriend[0].user_id,
       };
+
       const add = await addFriend(setData);
       return helper.response(res, 200, "SUCCESS ADD FRIENDS", add);
     } catch (err) {
-      console.log(err);
-      return helper.response(res, 404, "BAD REQUEST", err);
+      return helper.response(res, 404, "THIS PERSON IS NOT REGISTERED", err);
     }
   },
   getMyFriends: async (req, res) => {
@@ -89,7 +90,9 @@ module.exports = {
 
         for (i = 0; i < getData.length; i++) {
           const getSender = await getUserById(getData[i].user_id);
+          const receiver = await getUserById(getData[i].friends_id);
           getData[i].sender_name = getSender[0].user_name;
+          getData[i].receiver = receiver[0];
         }
 
         result[0].messages = getData;

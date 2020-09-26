@@ -93,6 +93,7 @@ module.exports = {
             user_name,
             user_phone,
             user_email,
+            user_image
           } = checkDataUser[0];
 
           let payload = {
@@ -100,6 +101,7 @@ module.exports = {
             user_email,
             user_name,
             user_phone,
+            user_image
           };
           const token = jwt.sign(payload, "PASSWORD", {
             expiresIn: "24h",
