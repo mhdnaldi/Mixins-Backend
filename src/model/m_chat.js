@@ -4,7 +4,7 @@ module.exports = {
   getUserById: (id) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        `SELECT * FROM user WHERE user_id = ?`,
+        `SELECT user_name, user_email, user_image, user_phone, user_id FROM user WHERE user_id = ?`,
         id,
         (err, data) => {
           !err ? resolve(data) : reject(new Error(err));
@@ -17,6 +17,17 @@ module.exports = {
     return new Promise((resolve, reject) => {
       connection.query(
         "SELECT * FROM `friends` JOIN user ON friends.friends_id = user.user_id WHERE friends.user_id = ?",
+        id,
+        (err, data) => {
+          !err ? resolve(data) : reject(new Error(err));
+        }
+      );
+    });
+  },
+  searchFriends: (id, user_name) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        `SELECT * FROM friends JOIN user ON friends.friends_id = user.user_id WHERE friends.user_id = ? AND user_name LIKE '%${user_name}%'`,
         id,
         (err, data) => {
           !err ? resolve(data) : reject(new Error(err));
