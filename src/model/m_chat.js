@@ -24,10 +24,10 @@ module.exports = {
       );
     });
   },
-  searchFriends: (id, user_name) => {
+  searchFriends: (id, search) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        `SELECT * FROM friends JOIN user ON friends.friends_id = user.user_id WHERE friends.user_id = ? AND user_name LIKE '%${user_name}%'`,
+        `SELECT * FROM friends JOIN user ON friends.friends_id = user.user_id WHERE friends.user_id = ? AND user_name LIKE '%${search}%'`,
         id,
         (err, data) => {
           !err ? resolve(data) : reject(new Error(err));
@@ -117,35 +117,25 @@ module.exports = {
       );
     });
   },
-  getRoomByUser: (id) => {
+  getRoomByUser: (friends_id, user_id) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        "SELECT * FROM roomchat WHERE user_id = ?",
-        id,
-        (error, result) => {
-          !error ? resolve(result) : reject(new Error(error));
-        }
-      );
-    });
-  },
-  getRoomByFriends: (id) => {
-    return new Promise((resolve, reject) => {
-      connection.query(
-        "SELECT * FROM roomchat WHERE friends_id = ?",
-        id,
-        (error, result) => {
-          !error ? resolve(result) : reject(new Error(error));
+        "SELECT user_name, user_phone, user_email, user_image FROM `roomchat` JOIN user ON roomchat.friends_id = user.user_id WHERE roomchat.friends_id = ? AND roomchat.user_id = ? ",
+        [friends_id, user_id],
+        (err, data) => {
+          !err ? resolve(data) : reject(new Error(err));
         }
       );
     });
   },
   getMessageByRoomId: (id) => {
+    err;
     return new Promise((resolve, reject) => {
       connection.query(
         "SELECT * FROM message WHERE room_id = ?",
         id,
-        (error, result) => {
-          !error ? resolve(result) : reject(new Error(error));
+        (err, data) => {
+          !err ? resolve(data) : reject(new Error(err));
         }
       );
     });
