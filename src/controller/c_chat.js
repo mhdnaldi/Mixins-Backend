@@ -54,14 +54,26 @@ module.exports = {
     const { user_id, friends_id } = req.body;
     try {
       const check = await checkRoom(user_id, friends_id);
-      const createRoomId = Math.round(Math.random() * 100000);
-      const setData = {
-        room_id: createRoomId,
-        user_id,
-        friends_id,
-      };
-      const createRoom = await postRoom(setData);
-      return helper.response(res, 200, "SUCCES CREATE ROOM CHAT", createRoom);
+      if (check.length < 1) {
+        const createRoomId = Math.round(Math.random() * 100000);
+        const setData = {
+          room_id: createRoomId,
+          user_id,
+          friends_id,
+        };
+        const setData2 = {
+          room_id: createRoomId,
+          user_id: friends_id,
+          friends_id: user_id,
+        };
+        const createRoom = await postRoom(setData);
+        const createRoom2 = await postRoom(setData2);
+        return helper.response(res, 200, "SUCCES CREATE ROOM CHAT", [
+          createRoom,
+        ]);
+      } else {
+        return helper.response(res, 200, "SUCCESS GET ROOM", check);
+      }
     } catch (error) {
       return helper.response(res, 404, "BAD REQUEST", err);
     }
