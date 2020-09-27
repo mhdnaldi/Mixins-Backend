@@ -11,8 +11,18 @@ const {
   getAllFriends,
   searchFriends,
   getRoomByUser,
+  getAllRoom,
 } = require("../model/m_chat");
 module.exports = {
+  getAllUserRoom: async (req, res) => {
+    const { id } = req.params;
+    try {
+      const result = await getAllRoom(id);
+      return helper.response(res, 200, "SUCCESS GET DATA", result);
+    } catch (err) {
+      return helper.response(res, 404, "BAD REQUEST", err);
+    }
+  },
   addFriends: async (req, res) => {
     const { user_id, friends_email } = req.body;
     try {

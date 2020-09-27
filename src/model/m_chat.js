@@ -24,6 +24,17 @@ module.exports = {
       );
     });
   },
+  getAllRoom: (id) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        "SELECT * FROM roomchat JOIN user ON roomchat.friends_id = user.user_id WHERE roomchat.user_id = ?",
+        id,
+        (err, data) => {
+          !err ? resolve(data) : reject(new Error(err));
+        }
+      );
+    });
+  },
   searchFriends: (id, search) => {
     return new Promise((resolve, reject) => {
       connection.query(
