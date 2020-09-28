@@ -32,9 +32,8 @@ module.exports = {
         user_id,
         friends_id: getFriend[0].user_id,
       };
-
       const add = await addFriend(setData);
-      return helper.response(res, 200, "SUCCESS ADD FRIENDS", add);
+      return helper.response(res, 200, "SUCCESS ADD FRIENDS");
     } catch (err) {
       return helper.response(res, 404, "THIS PERSON IS NOT REGISTERED", err);
     }
@@ -43,8 +42,7 @@ module.exports = {
     try {
       const { id } = req.params;
       const result = await getAllFriends(id);
-      console.log(result);
-      return helper.response(res, 200, "SUCCES GET DATA", result);
+      return helper.response(res, 200, "SUCCES GET", result);
     } catch (err) {
       return helper.response(res, 404, "BAD REQUEST", err);
     }
@@ -97,11 +95,11 @@ module.exports = {
     ) {
       return helper.response(
         res,
-        400,
+        200,
         "PLEASE TEXT SOMETHING BEFORE SENDING A MESSAGE"
       );
     } else if (user_id === friends_id) {
-      return helper.response(res, 400, "YOU CAN'T SEND MESSAGE TO YOURSELF");
+      return helper.response(res, 200, "YOU CAN'T SEND MESSAGE TO YOURSELF");
     }
     try {
       const getRoom = await checkRoomById(room_id);
@@ -114,6 +112,7 @@ module.exports = {
       const sendMessage = await postChat(setData);
       return helper.response(res, 200, "MESSAGE SEND", sendMessage);
     } catch (err) {
+      console.log(err);
       return helper.response(res, 404, "BAD REQUEST", err);
     }
   },
@@ -126,7 +125,7 @@ module.exports = {
 
         for (i = 0; i < getData.length; i++) {
           const getSender = await getUserById(getData[i].user_id);
-          const receiver = await getUserById(getData[i].friends_id);
+          const receiver = await getUserById(getData[i].user_id);
           getData[i].sender_name = getSender[0].user_name;
           getData[i].receiver = receiver[0];
         }

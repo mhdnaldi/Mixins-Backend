@@ -57,6 +57,13 @@ io.on("connection", (socket) => {
   socket.on("roomMessage", (data) => {
     io.to(data.room).emit("chatMessage", data);
   });
+
+  socket.on("setRoom", (data) => {
+    socket.join(data);
+  });
+  socket.on("mixinsMsg", (data) => {
+    io.to(data.room_id).emit("chatMixins", data);
+  });
 });
 //  -------------------------------------------------
 
