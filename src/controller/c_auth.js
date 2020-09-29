@@ -57,6 +57,10 @@ module.exports = {
           400,
           "PASSWORD MUST INCLUDES AT LEAST 1 UPPERCASE, LOWERCASE, NUMERIC DIGIT AND MINIMUM 8 CHARACTERS"
         );
+      } else if (user_name === "" || user_name === undefined) {
+        return helper.response(res, 400, "USERNAME CANNOT BE EMPTY");
+      } else if (user_phone === "" || user_phone === undefined) {
+        return helper.response(res, 400, "PHONE NUMBER CANNOT BE EMPTY");
       } else {
         const salt = bcrypt.genSaltSync(10);
         const hash = bcrypt.hashSync(user_password, salt); //encrypt password
@@ -93,7 +97,7 @@ module.exports = {
             user_name,
             user_phone,
             user_email,
-            user_image
+            user_image,
           } = checkDataUser[0];
 
           let payload = {
@@ -101,7 +105,7 @@ module.exports = {
             user_email,
             user_name,
             user_phone,
-            user_image
+            user_image,
           };
           const token = jwt.sign(payload, "PASSWORD", {
             expiresIn: "24h",
@@ -228,6 +232,16 @@ module.exports = {
           user_image: req.file === undefined ? "" : req.file.filename,
           updated_at: new Date(),
         };
+
+        if (
+          user_name === undefined ||
+          (user_name === "" && user_phone === undefined) ||
+          user_phone === ""
+        ) {
+          setData.user_name = getImage[0].user_name;
+          setData.user_phone = getImage[0].user_phone;
+        }
+
         const checkId = await getUserById(id);
         if (checkId.length > 0) {
           const result = await patchUser(setData, id);

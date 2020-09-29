@@ -25,15 +25,24 @@ module.exports = {
   },
   addFriends: async (req, res) => {
     const { user_id, friends_email } = req.body;
-    try {
-      const getFriend = await getUserByEmail(friends_email);
 
-      const setData = {
-        user_id,
-        friends_id: getFriend[0].user_id,
-      };
-      const add = await addFriend(setData);
-      return helper.response(res, 200, "SUCCESS ADD FRIENDS");
+    try {
+      const getSameEmail = await getUserById(user_id);
+      let checkFriends = await getAllFriends(user_id);
+      // ----------------------------------------
+      if (getSameEmail[0].user_email === friends_email) {
+        return helper.response(res, 404, "YOU CAN'T ADD YOURSELF");
+      } else if (checkFriends.match(friends_email)) {
+        return helper.response(res, 404, "THIS FRIENDS ALREADY EXISTS");
+      } else {
+        const getFriend = await getUserByEmail(friends_email);
+        const setData = {
+          user_id,
+          friends_id: getFriend[0].user_id,
+        };
+        const add = await addFriend(setData);
+        return helper.response(res, 200, "SUCCESS ADD FRIENDS");
+      }
     } catch (err) {
       return helper.response(res, 404, "THIS PERSON IS NOT REGISTERED", err);
     }
@@ -49,7 +58,6 @@ module.exports = {
   },
   searchFriend: async (req, res) => {
     const { id, search } = req.query;
-    console.log(req.params);
     try {
       const result = await searchFriends(id, search);
       return helper.response(res, 200, "SUCCESS GET DATA", result);
