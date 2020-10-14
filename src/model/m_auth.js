@@ -89,6 +89,28 @@ module.exports = {
       );
     });
   },
+  updateLongitude(longitude, id) {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        `UPDATE user SET longitude = ? WHERE user_id = ?`,
+        [longitude, id],
+        (err, data) => {
+          !err ? resolve(data) : reject(err);
+        }
+      );
+    });
+  },
+  updateLatitude(latitude, id) {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        `UPDATE user SET latitude = ? WHERE user_id = ?`,
+        [latitude, id],
+        (err, data) => {
+          !err ? resolve(data) : reject(err);
+        }
+      );
+    });
+  },
   checkKey: (keys) => {
     return new Promise((resolve, reject) => {
       connection.query(

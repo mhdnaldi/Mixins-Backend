@@ -11,6 +11,7 @@ const {
   deleteUser,
   forgotPassword,
   changePassword,
+  updatePosition,
 } = require("../controller/c_auth");
 
 // GET ALL USER
@@ -18,6 +19,7 @@ route.get("/", authorization, getAllUser);
 route.get("/:id", authorization, getUserById);
 route.post("/forgot-password", forgotPassword);
 route.patch("/change-password", changePassword);
+route.patch("/update-position/:id", updatePosition);
 route.patch("/:id", authorization, uploads, patchUser);
 route.delete("/:id", authorization, uploads, deleteUser);
 // AUTH

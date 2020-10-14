@@ -28,12 +28,16 @@ module.exports = {
 
     try {
       const getSameEmail = await getUserById(user_id);
-      let checkFriends = await getAllFriends(user_id);
+      // let checkFriends = await getAllFriends(user_id);
+      // checkFriends.map((value) => {
+      //   value;
+      // });
+      // console.log(checkFriends);
       // ----------------------------------------
       if (getSameEmail[0].user_email === friends_email) {
         return helper.response(res, 404, "YOU CAN'T ADD YOURSELF");
-      } else if (checkFriends.match(friends_email)) {
-        return helper.response(res, 404, "THIS FRIENDS ALREADY EXISTS");
+        // } else if (checkFriends.match(friends_email)) {
+        //   return helper.response(res, 404, "THIS FRIENDS ALREADY EXISTS");
       } else {
         const getFriend = await getUserByEmail(friends_email);
         const setData = {
@@ -44,7 +48,7 @@ module.exports = {
         return helper.response(res, 200, "SUCCESS ADD FRIENDS");
       }
     } catch (err) {
-      return helper.response(res, 404, "THIS PERSON IS NOT REGISTERED", err);
+      return helper.response(res, 404, "BAD REQUEST", err);
     }
   },
   getMyFriends: async (req, res) => {

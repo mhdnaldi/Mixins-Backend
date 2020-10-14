@@ -58,8 +58,15 @@ io.on("connection", (socket) => {
     io.to(data.room).emit("chatMessage", data);
   });
 
+  // ---------------------------------------------
+
   socket.on("setRoom", (data) => {
     socket.join(data);
+  });
+  socket.on("changeRoom", (data) => {
+    // console.log(data);
+    socket.leave(data.oldRoom);
+    socket.join(data.newRoom);
   });
   socket.on("mixinsMsg", (data) => {
     io.to(data.room_id).emit("chatMixins", data);

@@ -13,6 +13,8 @@ const {
   deleteUser,
   updateKeys,
   checkKey,
+  updateLongitude,
+  updateLatitude,
 } = require("../model/m_auth");
 
 module.exports = {
@@ -130,8 +132,7 @@ module.exports = {
     try {
       const { user_email } = req.body;
       const checkDataUser = await loginUser(user_email);
-      console.log(checkDataUser);
-      if (checkDataUser.length >= 1) {
+      if (checkDataUser.length < 1) {
         const user_id = checkDataUser[0].user_id;
         let keys = Math.round(Math.random() * 10000);
         const update = await updateKeys(keys, user_id);
@@ -267,6 +268,18 @@ module.exports = {
       return helper.response(res, 201, "USER DELETED", result);
     } catch (err) {
       return helper.response(res, 404, "BAD REQUEST", err);
+    }
+  },
+  updatePosition: async (req, res) => {
+    console.log("a");
+    const { id } = req.params;
+    const { longitude, latitude } = req.body;
+    try {
+      const long = await updateLongitude(longitude, id);
+      const lat = await updateLatitude(latitude, id);
+      return helper.response(res, 200, "Position updated");
+    } catch (err) {
+      return helper.response(res, 400, "BAD REQUEST", err);
     }
   },
 };
