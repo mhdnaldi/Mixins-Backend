@@ -12,6 +12,7 @@ const {
   searchFriends,
   getRoomByUser,
   getAllRoom,
+  deleteFriend,
 } = require("../model/m_chat");
 module.exports = {
   getAllUserRoom: async (req, res) => {
@@ -66,7 +67,6 @@ module.exports = {
       const result = await searchFriends(id, search);
       return helper.response(res, 200, "SUCCESS GET DATA", result);
     } catch (err) {
-      console.log(err);
       return helper.response(res, 404, "BAD REQUEST", err);
     }
   },
@@ -94,7 +94,7 @@ module.exports = {
       } else {
         return helper.response(res, 200, "SUCCESS GET ROOM", check);
       }
-    } catch (error) {
+    } catch (err) {
       return helper.response(res, 404, "BAD REQUEST", err);
     }
   },
@@ -124,7 +124,6 @@ module.exports = {
       const sendMessage = await postChat(setData);
       return helper.response(res, 200, "MESSAGE SEND", sendMessage);
     } catch (err) {
-      console.log(err);
       return helper.response(res, 404, "BAD REQUEST", err);
     }
   },
@@ -153,7 +152,6 @@ module.exports = {
         return helper.response(res, 404, "Room chat is not found!");
       }
     } catch (err) {
-      console.log(err);
       return helper.response(res, 404, "BAD REQUEST", err);
     }
   },
@@ -163,7 +161,16 @@ module.exports = {
       const result = await getRoomByUser(friends_id, user_id);
       return helper.response(res, 200, "SUCCESS GET USER ROOMCHAT", result);
     } catch (err) {
-      console.log(err);
+      return helper.response(res, 400, "BAD REQUEST", err);
+    }
+  },
+  deleteFriend: async (req, res) => {
+    const { id } = req.params;
+    const { friends_id } = req.body;
+    try {
+      const result = await deleteFriend(id, friends_id);
+      return helper.response(res, 200, "FRIENDS DELETED");
+    } catch (err) {
       return helper.response(res, 400, "BAD REQUEST", err);
     }
   },

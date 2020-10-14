@@ -151,4 +151,15 @@ module.exports = {
       );
     });
   },
+  deleteFriend: (userId, friendsId) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        "DELETE FROM friends WHERE user_id = ? AND friends_id =?",
+        [userId, friendsId],
+        (err, data) => {
+          !err ? resolve(data) : reject(new Error(err));
+        }
+      );
+    });
+  },
 };
