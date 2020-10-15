@@ -109,7 +109,7 @@ module.exports = {
             user_phone,
             user_image,
           };
-          const token = jwt.sign(payload, "PASSWORD", {
+          const token = jwt.sign(payload, process.env.JWT_KEY, {
             expiresIn: "24h",
           });
           payload = { ...payload, token };

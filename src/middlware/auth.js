@@ -6,7 +6,7 @@ module.exports = {
     let token = req.headers.authorization;
     if (token) {
       token = token.split(" ")[1];
-      jwt.verify(token, "PASSWORD", (err, data) => {
+      jwt.verify(token, process.env.JWT_KEY, (err, data) => {
         // CONDITION IF KEY IS INAVALID
         if (
           (err && err.name === "JsonWebTokenError") ||
