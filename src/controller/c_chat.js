@@ -166,7 +166,7 @@ module.exports = {
   },
   deleteFriend: async (req, res) => {
     const { id } = req.params;
-    const { friends_id } = req.body;
+    const { friends_id } = req.query;
     try {
       const result = await deleteFriend(id, friends_id);
       return helper.response(res, 200, "FRIENDS DELETED");

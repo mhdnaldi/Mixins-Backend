@@ -19,7 +19,7 @@ route.get("/", authorization, getAllUser);
 route.get("/:id", authorization, getUserById);
 route.post("/forgot-password", forgotPassword);
 route.patch("/change-password", changePassword);
-route.patch("/update-position/:id", updatePosition);
+route.patch("/update-position/:id", updatePosition); // here
 route.patch("/:id", authorization, uploads, patchUser);
 route.delete("/:id", authorization, uploads, deleteUser);
 // AUTH
