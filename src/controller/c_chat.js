@@ -134,6 +134,8 @@ module.exports = {
       if (result.length > 0) {
         const getData = await getMessageRoomByid(id);
 
+        console.log(getData);
+
         for (i = 0; i < getData.length; i++) {
           const getSender = await getUserById(getData[i].user_id);
           const receiver = await getUserById(getData[i].user_id);

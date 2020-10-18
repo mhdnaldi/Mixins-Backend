@@ -271,7 +271,6 @@ module.exports = {
     }
   },
   updatePosition: async (req, res) => {
-    console.log("a");
     const { id } = req.params;
     const { longitude, latitude } = req.body;
     try {
