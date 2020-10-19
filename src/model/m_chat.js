@@ -131,7 +131,7 @@ module.exports = {
   getRoomByUser: (friends_id, user_id) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        "SELECT user_name, user_phone, user_email, user_image FROM `roomchat` JOIN user ON roomchat.friends_id = user.user_id WHERE roomchat.friends_id = ? AND roomchat.user_id = ? ",
+        "SELECT user_name, user_phone, user_email, user_image, user_status FROM `roomchat` JOIN user ON roomchat.friends_id = user.user_id WHERE roomchat.friends_id = ? AND roomchat.user_id = ? ",
         [friends_id, user_id],
         (err, data) => {
           !err ? resolve(data) : reject(new Error(err));

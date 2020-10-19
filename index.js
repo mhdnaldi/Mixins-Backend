@@ -60,6 +60,11 @@ io.on("connection", (socket) => {
   });
 
   // ---------------------------------------------
+  socket.on("lastMsg", (data) => {
+    console.log(data);
+    io.to(data.friends_id).emit("notifMsg", data);
+  });
+  //  -------------------------------------------------
 
   socket.on("setRoom", (data) => {
     socket.join(data);
@@ -73,7 +78,6 @@ io.on("connection", (socket) => {
     io.to(data.room_id).emit("chatMixins", data);
   });
 });
-//  -------------------------------------------------
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));

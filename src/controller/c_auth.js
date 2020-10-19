@@ -10,6 +10,7 @@ const {
   getUserById,
   loginUser,
   patchUser,
+  patchBio,
   deleteUser,
   updateKeys,
   checkKey,
@@ -38,6 +39,7 @@ module.exports = {
         result
       );
     } catch (err) {
+      console.log(err);
       return helper.response(res, 404, "BAD REQUEST", err);
     }
   },
@@ -230,14 +232,13 @@ module.exports = {
           user_name,
           user_phone,
           user_password: hash,
-          user_image: req.file === undefined ? "" : req.file.filename,
+          user_image: req.file === undefined ? null : req.file.filename,
           updated_at: new Date(),
         };
 
         if (
-          user_name === undefined ||
-          (user_name === "" && user_phone === undefined) ||
-          user_phone === ""
+          (user_name === undefined || user_name === "") &&
+          (user_phone === undefined || user_phone === "")
         ) {
           setData.user_name = getImage[0].user_name;
           setData.user_phone = getImage[0].user_phone;
@@ -254,6 +255,25 @@ module.exports = {
     } catch (err) {
       console.log(err);
       return helper.response(res, 404, "Bad Request", err);
+    }
+  },
+  patchBio: async (req, res) => {
+    const { id } = req.params;
+    const { user_bio } = req.body;
+    console.log(user_bio);
+    try {
+      const checkBio = await getUserById(id);
+      if (checkBio[0].user_bio === "" || checkBio[0].user_bio === undefined) {
+        user_bio = checkBio[0].user_bio;
+      } else if (user_bio.length >= 20) {
+        return helper.response(res, 400, "MAXIMUM 20 CHARACTER");
+      } else {
+        const result = await patchBio(id, user_bio);
+        return helper.response(res, 200, "BIO UPDATED", result);
+      }
+    } catch (err) {
+      console.log(err);
+      return helper.response(res, 400, "BAD REQUEST", err);
     }
   },
   deleteUser: async (req, res) => {

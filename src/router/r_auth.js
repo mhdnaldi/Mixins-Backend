@@ -12,6 +12,7 @@ const {
   forgotPassword,
   changePassword,
   updatePosition,
+  patchBio,
 } = require("../controller/c_auth");
 
 // GET ALL USER
@@ -21,6 +22,7 @@ route.post("/forgot-password", forgotPassword);
 route.patch("/change-password", changePassword);
 route.patch("/update-position/:id", updatePosition); // here
 route.patch("/:id", authorization, uploads, patchUser);
+route.patch("/bio/:id", patchBio);
 route.delete("/:id", authorization, uploads, deleteUser);
 // AUTH
 route.post("/register", registerUser);

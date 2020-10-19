@@ -12,4 +12,23 @@ module.exports = {
       );
     });
   },
+  patchStatus: (id, status) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        "UPDATE user SET user_status = ? WHERE user_id = ?",
+        [status, id],
+        (err, data) => {
+          if (!err) {
+            const newResult = {
+              user_id: id,
+              user_status: status,
+            };
+            resolve(newResult);
+          } else {
+            reject(new Error(err));
+          }
+        }
+      );
+    });
+  },
 };

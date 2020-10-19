@@ -39,7 +39,7 @@ module.exports = {
   loginUser: (email) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        `SELECT user_id, user_email, user_password, user_name, user_keys, user_phone FROM user WHERE user_email = ?`,
+        `SELECT user_id, user_email, user_password, user_name, user_keys, user_phone, user_status, user_bio FROM user WHERE user_email = ?`,
         email,
         (err, data) => {
           // console.log(email);
@@ -58,6 +58,25 @@ module.exports = {
             const newResult = {
               user_id: id,
               ...setData,
+            };
+            resolve(newResult);
+          } else {
+            reject(new Error(err));
+          }
+        }
+      );
+    });
+  },
+  patchBio: (id, user_bio) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        "UPDATE user SET user_bio = ? WHERE user_id = ?",
+        [user_bio, id],
+        (err, data) => {
+          if (!err) {
+            const newResult = {
+              user_id: id,
+              user_bio: user_bio,
             };
             resolve(newResult);
           } else {
