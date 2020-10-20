@@ -8,28 +8,17 @@ module.exports = {
     try {
       const { id } = req.params;
       const result = await getAllRoom(id);
-      // console.log(result);
+      let arr = [];
       for (let i = 0; i < result.length; i++) {
-        let notifData = await getChatNotification(
+        let totalNotification = await getChatNotification(
           result[i].room_id,
-          result[i].user_id
+          result[i].friends_id
         );
-        console.log(notifData);
-        // return helper.response(res, 200, "SUCCESS", notifData);
+        arr.push(totalNotification);
       }
-
-      // -----------------------------------------------
-      // //   let result = await getChatNotification(room_id, user_id);
-      //   result = result.map((value) => {
-      //     return value.msg;
-      //   });
-      //   const length = result.length;
-      //   const lastMessage = result[length - 1];
-      //   const newResult = {
-      //     notif: length,
-      //     msg: lastMessage,
-      //   };
-      //   return helper.response(res, 200, "DATA FOUND", newResult);
+      console.log(arr[0][0].total);
+      console.log(arr[1][0].total);
+      helper.response(res, 200, "DATA FOUND", arr);
     } catch (err) {
       console.log(err);
     }
@@ -45,3 +34,28 @@ module.exports = {
     }
   },
 };
+
+// const { id } = req.params;
+// const result = await getAllRoom(id);
+// // console.log(result);
+// for (let i = 0; i < result.length; i++) {
+//   let notifData = await getChatNotification(
+//     result[i].room_id,
+//     result[i].user_id
+//   );
+//   console.log(notifData);
+//   // return helper.response(res, 200, "SUCCESS", notifData);
+// }
+
+// -----------------------------------------------
+// //   let result = await getChatNotification(room_id, user_id);
+//   result = result.map((value) => {
+//     return value.msg;
+//   });
+//   const length = result.length;
+//   const lastMessage = result[length - 1];
+//   const newResult = {
+//     notif: length,
+//     msg: lastMessage,
+//   };
+//   return helper.response(res, 200, "DATA FOUND", newResult);

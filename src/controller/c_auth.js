@@ -102,6 +102,8 @@ module.exports = {
             user_phone,
             user_email,
             user_image,
+            user_bio,
+            user_status,
           } = checkDataUser[0];
 
           let payload = {
@@ -110,11 +112,14 @@ module.exports = {
             user_name,
             user_phone,
             user_image,
+            user_bio,
+            user_status,
           };
           const token = jwt.sign(payload, process.env.JWT_KEY, {
             expiresIn: "24h",
           });
           payload = { ...payload, token };
+          console.log(payload);
           return helper.response(res, 200, "LOGIN SUCCESS!", payload);
         } else {
           return helper.response(res, 400, "WRONG PASSWORD!");
@@ -126,7 +131,8 @@ module.exports = {
           "EMAIL IS NOT REGISTERED, PLEASE SIGN UP FIRST"
         );
       }
-    } catch (error) {
+    } catch (err) {
+      console.log(err);
       return helper.response(res, 404, "BAD REQUEST", err);
     }
   },
