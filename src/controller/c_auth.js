@@ -39,7 +39,6 @@ module.exports = {
         result
       );
     } catch (err) {
-      console.log(err);
       return helper.response(res, 404, "BAD REQUEST", err);
     }
   },
@@ -81,7 +80,6 @@ module.exports = {
         return helper.response(res, 200, "REGISTER SUCCESS", result);
       }
     } catch (err) {
-      console.log(err);
       return helper.response(res, 404, "BAD REQUEST", err);
     }
   },
@@ -119,7 +117,6 @@ module.exports = {
             expiresIn: "24h",
           });
           payload = { ...payload, token };
-          console.log(payload);
           return helper.response(res, 200, "LOGIN SUCCESS!", payload);
         } else {
           return helper.response(res, 400, "WRONG PASSWORD!");
@@ -132,7 +129,6 @@ module.exports = {
         );
       }
     } catch (err) {
-      console.log(err);
       return helper.response(res, 404, "BAD REQUEST", err);
     }
   },
@@ -173,7 +169,6 @@ module.exports = {
         return helper.response("THIS EMAIL IS NOT REGISTERED");
       }
     } catch (err) {
-      console.log(err);
       return helper.response(res, 404, "BAD REQUEST", err);
     }
   },
@@ -209,7 +204,6 @@ module.exports = {
         }
       }
     } catch (err) {
-      console.log(err);
       return helper.response(res, 404, "BAD REQUEST", err);
     }
   },
@@ -259,14 +253,12 @@ module.exports = {
         }
       }
     } catch (err) {
-      console.log(err);
       return helper.response(res, 404, "Bad Request", err);
     }
   },
   patchBio: async (req, res) => {
     const { id } = req.params;
     const { user_bio } = req.body;
-    console.log(user_bio);
     try {
       const checkBio = await getUserById(id);
       if (checkBio[0].user_bio === "" || checkBio[0].user_bio === undefined) {
@@ -278,7 +270,6 @@ module.exports = {
         return helper.response(res, 200, "BIO UPDATED", result);
       }
     } catch (err) {
-      console.log(err);
       return helper.response(res, 400, "BAD REQUEST", err);
     }
   },

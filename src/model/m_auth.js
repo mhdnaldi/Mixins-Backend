@@ -42,7 +42,6 @@ module.exports = {
         `SELECT user_id, user_email, user_password, user_image, user_name, user_keys, user_phone, user_status, user_bio FROM user WHERE user_email = ?`,
         email,
         (err, data) => {
-          // console.log(email);
           !err ? resolve(data) : reject(new Error(err));
         }
       );

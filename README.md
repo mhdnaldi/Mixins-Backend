@@ -39,4 +39,4 @@ JWT_KEY=PASSWORD
 
 ## Postman Documentation
 
-https://www.getpostman.com/collections/93446ea7a265438f4f9a
+https://documenter.getpostman.com/view/12612781/TVYCALPL

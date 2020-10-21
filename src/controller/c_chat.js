@@ -31,7 +31,7 @@ module.exports = {
       const getSameEmail = await getUserById(user_id);
       // let checkFriends = await getAllFriends(user_id);
       // checkFriends.map((value) => {
-      //   value;
+      //   return value;
       // });
       // console.log(checkFriends);
       // ----------------------------------------
@@ -133,9 +133,6 @@ module.exports = {
       const result = await checkRoomById(id);
       if (result.length > 0) {
         const getData = await getMessageRoomByid(id);
-
-        console.log(getData);
-
         for (i = 0; i < getData.length; i++) {
           const getSender = await getUserById(getData[i].user_id);
           const receiver = await getUserById(getData[i].user_id);
