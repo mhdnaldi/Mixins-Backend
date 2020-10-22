@@ -21,7 +21,7 @@ module.exports = {
       const result = await getAllRoom(id);
       return helper.response(res, 200, "SUCCESS GET DATA", result);
     } catch (err) {
-      return helper.response(res, 404, "BAD REQUEST", err);
+      return helper.response(res, 400, "BAD REQUEST", err);
     }
   },
   addFriends: async (req, res) => {
@@ -29,16 +29,16 @@ module.exports = {
 
     try {
       const getSameEmail = await getUserById(user_id);
-      // let checkFriends = await getAllFriends(user_id);
-      // checkFriends.map((value) => {
-      //   return value;
-      // });
-      // console.log(checkFriends);
+      let checkFriends = await getAllFriends(user_id);
+      checkFriends = checkFriends.map((value) => {
+        return value.user_email;
+      });
+      if (checkFriends.includes(friends_email)) {
+        return helper.response(res, 400, "THIS FRIENDS ALREADY EXISTS");
+      }
       // ----------------------------------------
       if (getSameEmail[0].user_email === friends_email) {
-        return helper.response(res, 404, "YOU CAN'T ADD YOURSELF");
-        // } else if (checkFriends.match(friends_email)) {
-        //   return helper.response(res, 404, "THIS FRIENDS ALREADY EXISTS");
+        return helper.response(res, 400, "YOU CAN'T ADD YOURSELF");
       } else {
         const getFriend = await getUserByEmail(friends_email);
         const setData = {
@@ -49,7 +49,7 @@ module.exports = {
         return helper.response(res, 200, "SUCCESS ADD FRIENDS");
       }
     } catch (err) {
-      return helper.response(res, 404, "BAD REQUEST", err);
+      return helper.response(res, 400, "THIS USER IS NOT REGISTERED", err);
     }
   },
   getMyFriends: async (req, res) => {
@@ -58,7 +58,7 @@ module.exports = {
       const result = await getAllFriends(id);
       return helper.response(res, 200, "SUCCES GET", result);
     } catch (err) {
-      return helper.response(res, 404, "BAD REQUEST", err);
+      return helper.response(res, 400, "BAD REQUEST", err);
     }
   },
   searchFriend: async (req, res) => {
@@ -67,7 +67,7 @@ module.exports = {
       const result = await searchFriends(id, search);
       return helper.response(res, 200, "SUCCESS GET DATA", result);
     } catch (err) {
-      return helper.response(res, 404, "BAD REQUEST", err);
+      return helper.response(res, 400, "BAD REQUEST", err);
     }
   },
   createRoom: async (req, res) => {
